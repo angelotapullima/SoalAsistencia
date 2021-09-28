@@ -149,11 +149,16 @@ class _AsistenciaState extends State<Asistencia> {
                   ),
                   InkWell(
                     onTap: () async {
-                      final listPersonas = await dataPersona.obtenerPersonasDni(_controller.value, dniController.text);
-                      if (listPersonas.length > 0) {
-                        _controller.changeData('${listPersonas[0].personName}', 'Tu asistencia fue registrada correctamente', 1);
+                      final listpeople = await dataPersona.obtenerPersonas();
+                      if (listpeople.length > 0) {
+                        final listPersonas = await dataPersona.obtenerPersonasDni(_controller.value, dniController.text);
+                        if (listPersonas.length > 0) {
+                          _controller.changeData('${listPersonas[0].personName}', 'Tu asistencia fue registrada correctamente', 1);
+                        } else {
+                          _controller.changeData('', 'No se encontró', 2);
+                        }
                       } else {
-                        _controller.changeData('', 'No se encontró', 2);
+                        _controller.changeData('', 'Debe cargar personas', 2);
                       }
                     },
                     child: Container(

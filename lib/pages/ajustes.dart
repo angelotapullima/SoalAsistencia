@@ -87,8 +87,10 @@ class Ajustes extends StatelessWidget {
 
                     final res = await asistenciaApi.guardarAsistencia();
 
-                    if (res) {
+                    if (res == 1) {
                       showToast2("Guardado correctamente", Colors.green);
+                    } else if (res == 0) {
+                      showToast2("Sin asistencias registradas", Colors.red);
                     } else {
                       showToast2("Ocurrió un error", Colors.red);
                     }
