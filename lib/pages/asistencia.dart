@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:soal/database/asistencia_database.dart';
 import 'package:soal/database/persona_database.dart';
+import 'package:soal/model/asistencia_model.dart';
 import 'package:soal/utils/utils.dart';
 
 class Asistencia extends StatefulWidget {
@@ -153,6 +155,13 @@ class _AsistenciaState extends State<Asistencia> {
                       if (listpeople.length > 0) {
                         final listPersonas = await dataPersona.obtenerPersonasDni(_controller.value, dniController.text);
                         if (listPersonas.length > 0) {
+                          final asistenciaDB = AsistenciaDatabase();
+                          AsistenciaModel asistencia = AsistenciaModel();
+                          asistencia.tipoDoc = _controller.value;
+                          asistencia.nroDoc = dniController.text;
+                          asistencia.fecha = obtenerFecha();
+                          asistencia.hora = obtenerHora();
+                          await asistenciaDB.insertarAsistencia(asistencia);
                           _controller.changeData('${listPersonas[0].personName}', 'Tu asistencia fue registrada correctamente', 1);
                         } else {
                           _controller.changeData('', 'No se encontró', 2);
