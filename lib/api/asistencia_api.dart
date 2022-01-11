@@ -10,7 +10,7 @@ import 'package:soal/utils/utils.dart';
 class AsistenciaApi {
   final _asistenciaDatabase = AsistenciaDatabase();
   final _personaDatabase = PersonaDatabase();
-  Future<bool> guardarAsistencia() async {
+  Future<int> guardarAsistencia() async {
     try {
       final url = Uri.parse('https://intranet.proonix.com.pe/api/bufeo/guardar_asistencia_diaria');
 
@@ -35,15 +35,15 @@ class AsistenciaApi {
 
         if (decodedData['result']['code'] == 1) {
           await _asistenciaDatabase.deleteAsistencia();
-          return true;
+          return 1;
         } else {
-          return false;
+          return 2;
         }
       } else {
-        return false;
+        return 0;
       }
     } catch (e) {
-      return false;
+      return 2;
     }
   }
 
@@ -54,6 +54,7 @@ class AsistenciaApi {
 
       final resp = await http.post(url, body: {});
       final decodedData = json.decode(resp.body);
+      print(decodedData);
 
       if (decodedData['result']['code'] == 1) {
         for (var i = 0; i < decodedData['result']['personal'].length; i++) {
